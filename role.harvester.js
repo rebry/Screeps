@@ -1,4 +1,4 @@
-
+var roleUpgrader = require('role.upgrader');
 
 var roleHarvester = {
     run: function(creep) {
@@ -6,6 +6,7 @@ var roleHarvester = {
 
         if (creep.carry.energy == 0) {
             creep.memory.isEmpty = true
+            creep.memory.upgrading = false
         }else if(creep.carry.energy == creep.carryCapacity) {
             creep.memory.isEmpty = false
         }
@@ -23,7 +24,6 @@ var roleHarvester = {
                 creep.moveTo(source);
             }
 
-            //Evnt hvis miners == antall energy spawns, convert to hauler()
         } else {
             var structure = creep.pos.findClosestByPath(FIND_MY_STRUCTURES, {
                     filter: (s) => (s.structureType == STRUCTURE_SPAWN
@@ -35,9 +35,13 @@ var roleHarvester = {
                     creep.moveTo(structure);
                 }
             }else if(creep.carry.energy == creep.carryCapacity){
-                creep.say("IDLE-Full")
+                if(!creep.memory.upgrading){
+                    creep.memory.upgrading = true;
+                }
+            }else if(creep.memory.upgrading){
+                roleUpgrader.run(creep);
             }else{
-
+                creep.say("IDLE")
             }
 
         }

@@ -66,7 +66,7 @@ var roleMiner = {
                         foundConstructionSite = true;
                     }
                 }
-                if (!foundAContainer && !foundConstructionSite) {
+                if (!(foundAContainer || foundConstructionSite)) {
                     creep.room.createConstructionSite(creep.pos, STRUCTURE_CONTAINER);
                 }
                 if (creep.pos.getRangeTo(nearestConstructionSite) ==  0) {
